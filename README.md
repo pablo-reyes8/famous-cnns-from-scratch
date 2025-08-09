@@ -37,6 +37,17 @@ Planned implementations:
 
 These tools provide insights into **what the network learns** at different stages of training, both in terms of spatial features and class representations.
 
+## 📚 References
+
+- LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). *Gradient-based learning applied to document recognition*. Proceedings of the IEEE, 86(11), 2278–2324.  
+- Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). *ImageNet classification with deep convolutional neural networks*. Advances in Neural Information Processing Systems, 25.  
+- Coates, A., Ng, A. Y., & Lee, H. (2011). *An analysis of single-layer networks in unsupervised feature learning*. AISTATS.  
+- PyTorch Documentation: [https://pytorch.org/docs/stable/index.html](https://pytorch.org/docs/stable/index.html)  
+- STL-10 Dataset: [https://cs.stanford.edu/~acoates/stl10/](https://cs.stanford.edu/~acoates/stl10/)  
+- MNIST Dataset: [http://yann.lecun.com/exdb/mnist/](http://yann.lecun.com/exdb/mnist/)
+
+
+
 ---
 
 ## 📝 License
