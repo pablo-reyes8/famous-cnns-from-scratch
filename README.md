@@ -7,13 +7,13 @@ Each model is built manually without relying on `torchvision.models`, allowing f
 Currently implemented:
 - **LeNet-5** – Classic CNN for handwritten digit recognition.
 - **AlexNet** – The breakthrough architecture from ILSVRC 2012.
+- - **U-Net** – Encoder–decoder architecture for image segmentation.
 
 
 Planned implementations:
 - **ResNet** – Residual learning framework.
 - **Inception (GoogLeNet)** – Multi-branch convolutional architecture.
-- **U-Net** – Encoder–decoder architecture for image segmentation.
-  
+
 ---
 
 ## 🚀 Features
