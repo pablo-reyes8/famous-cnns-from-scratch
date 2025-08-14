@@ -11,7 +11,7 @@ Currently implemented:
 
 
 Planned implementations:
-- **ResNet** – Residual learning framework.
+- **ResNet** – Residual learning for deeper neural nets.
 - **Inception (GoogLeNet)** – Multi-branch convolutional architecture.
 
 ---
