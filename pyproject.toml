@@ -1,5 +1,5 @@
 [project]
-name = "deep_learning"
+name = "famous_deep_learning_cnns"
 version = "0.1.0"
 description = ""
 authors = [
@@ -22,3 +22,4 @@ dependencies = [
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
