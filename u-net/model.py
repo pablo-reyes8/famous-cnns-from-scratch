@@ -1,6 +1,11 @@
 import torch.nn as nn
 import torch
 
+
+
+######## This implement the U-net model arquitecture ############ 
+
+
 class ConvRelu(nn.Module):
     def __init__(self, in_c, out_c, k=3, s=1, p=1):
         super().__init__()
@@ -126,4 +131,5 @@ class UNet(nn.Module):
         logits = self.out_conv(x)
         return logits
     
+
 
