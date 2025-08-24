@@ -1,4 +1,4 @@
-# AlexNet Implementation (from Scratch with PyTorch)
+# AlexNet Implementation 
 
 ## Introduction
 
