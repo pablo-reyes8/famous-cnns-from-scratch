@@ -1,4 +1,4 @@
-# U-Net Implementation (from Scratch with PyTorch)
+# U-Net Implementation
 
 ## Introduction
 
