@@ -57,6 +57,7 @@ These tools provide insights into **what CNNs learn internally**, from low-level
 ## 🕰 Historical Evolution of CNNs
 
 ```mermaid
+%%{init: {"theme": "default", "themeVariables": { "fontSize": "18px"}, "logLevel": "debug", "scale": 2.0 }}%%
 timeline
     title Evolution of CNN Architectures
     1998 : **LeNet-5**  
