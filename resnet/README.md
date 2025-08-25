@@ -1,62 +1,64 @@
-# Famous CNN Architectures from Scratch (PyTorch)
+# ResNet-50 Implementation 
 
+## Introduction
 
-![Repo size](https://img.shields.io/github/repo-size/pablo-reyes8/famous-cnns-from-scratch)
-![Last commit](https://img.shields.io/github/last-commit/pablo-reyes8/famous-cnns-from-scratch)
-![Open issues](https://img.shields.io/github/issues/pablo-reyes8/famous-cnns-from-scratch)
-![Forks](https://img.shields.io/github/forks/pablo-reyes8/famous-cnns-from-scratch?style=social)
-![Stars](https://img.shields.io/github/stars/pablo-reyes8/famous-cnns-from-scratch?style=social)
+**ResNet (Residual Network)**, introduced by Kaiming He et al. in 2015, marked a major breakthrough in deep learning. ResNet won the **ILSVRC 2015 classification challenge**, achieving unprecedented accuracy while being dramatically deeper (up to 152 layers) than previous architectures.  
 
+The key innovation of ResNet is the introduction of **residual connections (skip connections)**, which solved the problem of vanishing gradients in very deep networks. This design allowed training of networks with over 100 layers, something previously thought impractical.  
 
-This repository contains **from-scratch implementations** of several iconic Convolutional Neural Network (CNN) architectures using **PyTorch**.  
-Each model is built manually without relying on `torchvision.models`, allowing full control over the design, training loop, and experimentation.
-
-
-Currently implemented:
-- **LeNet-5** – Classic CNN for handwritten digit recognition.
-- **AlexNet** – The breakthrough architecture from ILSVRC 2012.
-- **U-Net** – Encoder–decoder architecture for image segmentation.
-
-
-Planned implementations:
-- **ResNet** – Residual learning for deeper neural nets.
-- **Inception (GoogLeNet)** – Multi-branch convolutional architecture.
+ResNet was revolutionary because it:  
+- Demonstrated that **very deep networks** could be trained effectively using residual blocks.  
+- Introduced the now-standard concept of **identity and convolutional shortcut connections**.  
+- Provided a scalable architecture (ResNet-18, 34, 50, 101, 152) used as backbones for numerous tasks (detection, segmentation, transfer learning).  
+- Became one of the most influential CNN architectures, forming the basis of modern vision models such as ResNeXt, EfficientNet, and even serving as encoders for vision transformers.
 
 ---
 
-## 🚀 Features
-- Implementations built **line-by-line from scratch** in PyTorch.
-- Modular code: layers, blocks, and classifiers defined separately.
-- Works with custom datasets or popular datasets like **MNIST**, **STL-10**, etc.
-- **Training utilities**: progress bars, mixed precision support, top-k accuracy.
-- **Evaluation utilities**: visualize predictions, plot learned filters, t-SNE/UMAP embeddings.
+## Project Structure
 
+This repository implements **ResNet-50** from scratch in PyTorch, applied to the CIFAR-10 dataset. The project is structured into data, model, training, and visualization utilities.
 
-## 🖼 Visualization Examples
+### 1. `load_data.py`
+Dataset loading and preprocessing.  
+- **`LoaderConfig`**: configuration object for dataset preprocessing and dataloaders.  
+- **`create_cifar10_loaders(cfg: LoaderConfig)`**: prepares train/test loaders for CIFAR-10.  
+- **`imshow_cifar`**: displays CIFAR-10 images for quick inspection.
 
-- **Predictions on the test set**  
-  Display grids of correctly and incorrectly classified samples with color-coded labels.  
+### 2. `model.py`
+Core ResNet-50 implementation.  
+- **`IdentityBlock(nn.Module)`**: residual block without dimension changes (identity skip connection).  
+- **`ConvolutionalBlock(nn.Module)`**: residual block with convolutional shortcut for dimension matching.  
+- **`ResNet50(nn.Module)`**: complete ResNet-50 architecture built from stacked residual blocks.
 
-- **First Convolutional Layer Filters**  
-  Visualize the learned kernels from the first layer to inspect low-level feature extraction.  
+### 3. `train_utils.py`
+Training utilities for classification tasks.  
+- **`_topk_accuracies`**: computes top-k accuracy metrics.  
+- **`train_epoch_classification`**: trains the model for one epoch.  
+- **`evaluate_classification`**: evaluates model performance on validation/test sets.
 
-- **t-SNE Embeddings**  
-  Project the output of the last convolutional block into 2D space using t-SNE or UMAP to observe class separability in the learned feature space.  
+### 4. `test_utils.py`
+Evaluation and visualization tools.  
+- **`visualize_test_predictions`**: shows test predictions with optional error-only display.  
+- **`show_feature_maps`**: visualizes intermediate activations from specific layers.  
+- **`show_first_conv_filters`**: displays the learned filters of the first convolutional layer.  
+- **`plot_weight_histograms`**: plots histograms of learned weights across layers.  
+- **`plot_confusion_matrix`**: generates normalized confusion matrices for classification evaluation.  
+- **`show_gradcam_grid`**: applies Grad-CAM to visualize class-specific saliency maps.
 
-These tools provide insights into **what the network learns** at different stages of training, both in terms of spatial features and class representations.
-
-## 📚 References
-
-- LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). *Gradient-based learning applied to document recognition*. Proceedings of the IEEE, 86(11), 2278–2324.  
-- Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). *ImageNet classification with deep convolutional neural networks*. Advances in Neural Information Processing Systems, 25.  
-- Coates, A., Ng, A. Y., & Lee, H. (2011). *An analysis of single-layer networks in unsupervised feature learning*. AISTATS.  
-- PyTorch Documentation: [https://pytorch.org/docs/stable/index.html](https://pytorch.org/docs/stable/index.html)  
-- STL-10 Dataset: [https://cs.stanford.edu/~acoates/stl10/](https://cs.stanford.edu/~acoates/stl10/)  
-- MNIST Dataset: [http://yann.lecun.com/exdb/mnist/](http://yann.lecun.com/exdb/mnist/)
-
-
+### 5. Jupyter Notebooks
+As with other architectures in this collection, two complementary workflows are provided:  
+- **`train_model.ipynb`**: demonstrates training ResNet-50 with the modular `.py` utilities.  
+- **`full ResNet.ipynb`**: a single self-contained notebook containing the entire workflow.
 
 ---
 
-## 📝 License
-This project is licensed under the **MIT License** – you are free to use, modify, and distribute this code, provided that appropriate credit is given to the original author.
+## Educational Purpose
+
+This project is intended for learning and experimentation. It:  
+- Shows how to implement **ResNet-50** from scratch using residual blocks.  
+- Provides visualization tools for inspecting filters, feature maps, and Grad-CAM saliency.  
+- Uses CIFAR-10 as a manageable dataset for training and experimentation.  
+
+By replicating ResNet-50, this repository highlights the significance of residual connections and why ResNet remains a **default backbone** in modern computer vision.
+
+---
