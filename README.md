@@ -54,6 +54,34 @@ These tools provide insights into **what CNNs learn internally**, from low-level
 
 ---
 
+## 🕰 Historical Evolution of CNNs
+
+```mermaid
+timeline
+    title Evolution of CNN Architectures
+    1998 : **LeNet-5**  
+        - First widely used CNN  
+        - Handwritten digit recognition (MNIST)  
+        - Introduced convolution + pooling + fully connected layers  
+    
+    2012 : **AlexNet**  
+        - Winner of ILSVRC 2012  
+        - Popularized GPUs, ReLU, and Dropout  
+        - Marked the start of modern Deep Learning  
+    
+    2015 : **ResNet**  
+        - Introduced *residual connections*  
+        - Enabled training of 100+ layer networks  
+        - Became a standard backbone in vision tasks  
+    
+    2015 : **U-Net**  
+        - Encoder–decoder with *skip connections*  
+        - Pixel-wise segmentation with high precision  
+        - Revolutionary in biomedical and satellite imaging  
+```
+
+
+
 ## 📚 References
 
 - LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). *Gradient-based learning applied to document recognition*. Proceedings of the IEEE, 86(11), 2278–2324.  
