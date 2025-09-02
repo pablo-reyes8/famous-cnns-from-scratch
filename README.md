@@ -23,6 +23,9 @@ Each model is built manually without relying on `torchvision.models`, providing 
 ## 🔮 Planned Implementations
 
 - **Inception (GoogLeNet, 2014)** – Multi-branch convolutional architecture with factorized filters and auxiliary classifiers, reducing computational cost while improving accuracy.
+- **VGG Net**
+- **Mobile Net**
+- **Dense Net**
 
 ---
 
