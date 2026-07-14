@@ -1,0 +1,9 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.21
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+        files: ^(famous_cnns|scripts|tests|[^/]+/scripts)/.*\.py$
+      - id: ruff-format
+        files: ^(famous_cnns|scripts|tests|[^/]+/scripts)/.*\.py$

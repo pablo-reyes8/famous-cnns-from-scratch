@@ -48,3 +48,16 @@ def test_orchestrator_trains_and_predicts():
     assert len(history["train_loss"]) == 1
     assert cnn.predict(images).shape == (4, 2)
     assert cnn.summary()["optimizer"] == "Adam"
+
+
+def test_checkpoint_reconstructs_orchestrator(tmp_path):
+    checkpoint = tmp_path / "model.pt"
+    cnn = CNNOrchestrator("lenet5", num_classes=3, optimizer="sgd", lr=0.01, device="cpu")
+    cnn.save(checkpoint)
+
+    restored = CNNOrchestrator.from_checkpoint(checkpoint, device="cpu", load_optimizer=True)
+
+    assert restored.summary()["architecture"] == "lenet5"
+    assert restored.summary()["num_classes"] == 3
+    assert restored.summary()["optimizer"] == "SGD"
+    assert restored.predict(torch.randn(1, 1, 32, 32)).shape == (1, 3)

@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 from torch import Tensor
 from torch.optim import SGD, Adam, AdamW, Optimizer, RMSprop
-
 
 _OPTIMIZERS = {
     "adam": Adam,

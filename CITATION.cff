@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "Famous CNNs from Scratch"
+type: software
+version: 0.3.0
+date-released: 2026-07-14
+authors:
+  - family-names: "Reyes"
+    given-names: "Pablo"
+    email: "alejogranados229@gmail.com"
+repository-code: "https://github.com/pablo-reyes8/famous-cnns-from-scratch"
+url: "https://github.com/pablo-reyes8/famous-cnns-from-scratch"
+license: MIT
+keywords:
+  - pytorch
+  - convolutional-neural-networks
+  - deep-learning
+  - computer-vision

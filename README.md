@@ -6,6 +6,9 @@
 ![Contributors](https://img.shields.io/github/contributors/pablo-reyes8/famous-cnns-from-scratch)
 ![Forks](https://img.shields.io/github/forks/pablo-reyes8/famous-cnns-from-scratch?style=social)
 ![Stars](https://img.shields.io/github/stars/pablo-reyes8/famous-cnns-from-scratch?style=social)
+[![CI](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/ci.yml/badge.svg)](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/codeql.yml/badge.svg)](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/codeql.yml)
+[![Docker](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/docker.yml/badge.svg)](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/docker.yml)
 
 # PyTorch CNN Architectures
 
@@ -17,13 +20,15 @@ The repository is designed as a **code-first literature review** of CNN architec
 
 1. [Unified Library API](#-unified-library-api)
 2. [Architectures at a Glance](#-architectures-at-a-glance)
-3. [Research Focus](#research-focus)
-4. [Features & Tooling](#features-tooling)
-5. [Repository Tour](#-repository-tour)
-6. [Visualization Suite](#-visualization-suite)
-7. [Historical Timeline](#-historical-timeline)
-8. [References](#-references)
-9. [License](#-license)
+3. [Command-line and Docker](#-command-line-and-docker)
+4. [Research Focus](#research-focus)
+5. [Features & Tooling](#features-tooling)
+6. [Repository Tour](#-repository-tour)
+7. [Visualization Suite](#-visualization-suite)
+8. [Historical Timeline](#-historical-timeline)
+9. [Contributing and Security](#-contributing-and-security)
+10. [References](#-references)
+11. [License](#-license)
 
 ---
 
@@ -124,6 +129,42 @@ fig_history.savefig("training_history.png", dpi=150, bbox_inches="tight")
 ```
 
 Input channels are adapted automatically, but spatial size still follows each architecture. `auto_resize=True` handles the recommended square size in the orchestrator; it is especially useful for LeNet-5 (32×32) and VGG-16 (224×224).
+
+---
+
+## 💻 Command-line and Docker
+
+The same high-level API is available from the terminal:
+
+```bash
+famous-cnns list
+famous-cnns info resnet50
+
+famous-cnns train \
+  --model resnet50 \
+  --num-classes 10 \
+  --data-dir dataset \
+  --optimizer adamw \
+  --epochs 20 \
+  --output outputs/resnet50.pt
+
+famous-cnns infer \
+  --checkpoint outputs/resnet50.pt \
+  --input samples/ \
+  --output outputs/predictions.json
+```
+
+Every architecture folder also contains `scripts/train.py` and `scripts/infer.py`. See the complete [CLI and dataset guide](docs/CLI.md).
+
+Run the packaged CLI without configuring a local Python environment:
+
+```bash
+docker build -t famous-cnns:local .
+docker run --rm famous-cnns:local list
+docker compose --profile test run --rm smoke-test
+```
+
+The container runs as a non-root user. Mount datasets at `/workspace/data` and write checkpoints to `/workspace/outputs`.
 
 ---
 
@@ -251,6 +292,14 @@ timeline
         - Dense connectivity to encourage feature reuse
         - Completes the chronological arc of classic CNNs
 ```
+
+---
+
+## 🤝 Contributing and Security
+
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community expectations. Report vulnerabilities privately according to [SECURITY.md](SECURITY.md); do not disclose them in public issues.
+
+The repository includes CI tests, package validation, CodeQL scanning, dependency review, Dependabot updates, Docker build checks, issue templates, code ownership, a changelog, and citation metadata. The high-level design is summarized in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). After merging, apply the protections in [docs/REPOSITORY_SETTINGS.md](docs/REPOSITORY_SETTINGS.md), since branch rules and security toggles cannot be committed as files.
 
 ---
 

@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable, Iterable, Sequence
 from pathlib import Path
-from typing import Any, Callable, Iterable, Sequence
+from typing import Any
 
 import torch
 import torch.nn.functional as F
@@ -41,6 +42,19 @@ class CNNOrchestrator:
             in_channels=in_channels,
             **model_kwargs,
         ).to(self.device)
+        self.configuration = {
+            "architecture": self.model.architecture_name,
+            "num_classes": num_classes,
+            "in_channels": self.model.input_channels,
+            "auto_resize": auto_resize,
+            "model_kwargs": model_kwargs,
+        }
+        if isinstance(optimizer, str):
+            self.configuration.update(
+                optimizer=optimizer,
+                lr=lr,
+                optimizer_kwargs=optimizer_kwargs or {},
+            )
         self.criterion = criterion or self._default_criterion()
         self.optimizer = (
             optimizer
@@ -68,7 +82,9 @@ class CNNOrchestrator:
         inputs = inputs.to(self.device, non_blocking=True)
         target_size = self.info.recommended_input_size
         if self.auto_resize and target_size and inputs.shape[-2:] != (target_size, target_size):
-            inputs = F.interpolate(inputs, size=(target_size, target_size), mode="bilinear", align_corners=False)
+            inputs = F.interpolate(
+                inputs, size=(target_size, target_size), mode="bilinear", align_corners=False
+            )
         return inputs
 
     def _prepare_targets(self, targets: Tensor) -> Tensor:
@@ -85,19 +101,21 @@ class CNNOrchestrator:
             image_key = "images" if "images" in batch else "image"
             target_key = "targets" if "targets" in batch else "target"
             return batch[image_key], batch[target_key]
-        if isinstance(batch, (tuple, list)) and len(batch) >= 2:
+        if isinstance(batch, tuple | list) and len(batch) >= 2:
             return batch[0], batch[1]
         raise ValueError("Cada batch debe ser (images, targets) o un diccionario equivalente.")
 
     @staticmethod
     def _main_output(output: Tensor | Sequence[Tensor]) -> Tensor:
-        return output[0] if isinstance(output, (tuple, list)) else output
+        return output[0] if isinstance(output, tuple | list) else output
 
     def _loss(self, output: Tensor | Sequence[Tensor], targets: Tensor) -> Tensor:
-        if isinstance(output, (tuple, list)):
+        if isinstance(output, tuple | list):
             main, *auxiliary = output
             loss = self.criterion(main, targets)
-            return loss + 0.3 * sum(self.criterion(aux, targets) for aux in auxiliary if aux is not None)
+            return loss + 0.3 * sum(
+                self.criterion(aux, targets) for aux in auxiliary if aux is not None
+            )
         return self.criterion(output, targets)
 
     def _metric_counts(self, logits: Tensor, targets: Tensor) -> tuple[int, int]:
@@ -193,12 +211,15 @@ class CNNOrchestrator:
         return {
             "architecture": self.model.architecture_name,
             "task": self.info.task,
+            "num_classes": self.num_classes,
             "device": str(self.device),
             "input_channels": self.model.input_channels,
             "recommended_input_size": self.info.recommended_input_size,
             "parameters": sum(parameter.numel() for parameter in self.model.parameters()),
             "trainable_parameters": sum(
-                parameter.numel() for parameter in self.model.parameters() if parameter.requires_grad
+                parameter.numel()
+                for parameter in self.model.parameters()
+                if parameter.requires_grad
             ),
             "optimizer": type(self.optimizer).__name__,
         }
@@ -206,15 +227,57 @@ class CNNOrchestrator:
     def save(self, path: str | Path) -> None:
         """Save a portable state-dict checkpoint."""
 
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
         torch.save(
             {
                 "model_state_dict": self.model.state_dict(),
                 "optimizer_state_dict": self.optimizer.state_dict(),
                 "history": self.history,
                 "summary": self.summary(),
+                "configuration": self.configuration,
             },
-            Path(path),
+            path,
         )
+
+    @classmethod
+    def from_checkpoint(
+        cls,
+        path: str | Path,
+        *,
+        device: str | torch.device | None = None,
+        load_optimizer: bool = False,
+        **overrides: Any,
+    ) -> CNNOrchestrator:
+        """Recreate an orchestrator from a checkpoint produced by :meth:`save`."""
+
+        checkpoint = torch.load(Path(path), map_location=device or "cpu", weights_only=True)
+        if "configuration" not in checkpoint:
+            raise ValueError("El checkpoint no contiene configuración para reconstruir el modelo.")
+        saved_configuration = dict(checkpoint["configuration"])
+        model_kwargs = saved_configuration.get("model_kwargs", {})
+        configuration = {
+            key: saved_configuration[key]
+            for key in (
+                "architecture",
+                "num_classes",
+                "in_channels",
+                "auto_resize",
+                "optimizer",
+                "lr",
+                "optimizer_kwargs",
+            )
+            if key in saved_configuration
+        }
+        configuration.update(overrides)
+        configuration["device"] = device
+        orchestrator = cls(**configuration, **model_kwargs)
+        orchestrator.model.load_state_dict(checkpoint["model_state_dict"])
+        if load_optimizer and "optimizer_state_dict" in checkpoint:
+            orchestrator.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+        orchestrator.history = checkpoint.get("history", orchestrator.history)
+        orchestrator.configuration.update(saved_configuration)
+        return orchestrator
 
     def plot_history(self, **kwargs: Any):
         from .visualization import plot_history
@@ -235,8 +298,11 @@ class CNNOrchestrator:
             raise ValueError("plot_predictions está diseñado para clasificación.")
         probabilities = self.predict(images).cpu()
         return plot_predictions(
-            images.cpu(), probabilities, targets.cpu() if targets is not None else None,
-            class_names=class_names, max_images=max_images,
+            images.cpu(),
+            probabilities,
+            targets.cpu() if targets is not None else None,
+            class_names=class_names,
+            max_images=max_images,
         )
 
     def plot_feature_maps(self, inputs: Tensor, *, layer: str | None = None, max_maps: int = 16):

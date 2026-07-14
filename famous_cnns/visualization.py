@@ -80,17 +80,25 @@ def plot_feature_maps(
 
     named_modules = dict(model.named_modules())
     if layer is None:
-        candidates = [(name, module) for name, module in named_modules.items() if isinstance(module, nn.Conv2d)]
+        candidates = [
+            (name, module)
+            for name, module in named_modules.items()
+            if isinstance(module, nn.Conv2d)
+        ]
         if not candidates:
             raise ValueError("El modelo no contiene capas Conv2d.")
         layer, selected = candidates[-1]
     else:
         if layer not in named_modules:
-            raise ValueError(f"No existe la capa '{layer}'. Usa dict(model.named_modules()) para listarlas.")
+            raise ValueError(
+                f"No existe la capa '{layer}'. Usa dict(model.named_modules()) para listarlas."
+            )
         selected = named_modules[layer]
 
     captured: list[Tensor] = []
-    hook = selected.register_forward_hook(lambda _module, _args, output: captured.append(output.detach()))
+    hook = selected.register_forward_hook(
+        lambda _module, _args, output: captured.append(output.detach())
+    )
     was_training = model.training
     model.eval()
     try:

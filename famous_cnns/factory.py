@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import importlib
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 import torch
 from torch import nn
@@ -27,7 +28,7 @@ class _ModelSpec:
     module: str
     class_name: str
     defaults: dict[str, Any] | None = None
-    builder: Callable[["_ModelSpec", int, dict[str, Any]], nn.Module] | None = None
+    builder: Callable[[_ModelSpec, int, dict[str, Any]], nn.Module] | None = None
 
 
 def _standard_builder(spec: _ModelSpec, num_classes: int, kwargs: dict[str, Any]) -> nn.Module:
@@ -38,9 +39,7 @@ def _standard_builder(spec: _ModelSpec, num_classes: int, kwargs: dict[str, Any]
     return model_class(num_classes=num_classes, **options)
 
 
-def _efficientnet_builder(
-    spec: _ModelSpec, num_classes: int, kwargs: dict[str, Any]
-) -> nn.Module:
+def _efficientnet_builder(spec: _ModelSpec, num_classes: int, kwargs: dict[str, Any]) -> nn.Module:
     variant = str(kwargs.pop("variant", "b0")).lower()
     if variant.startswith("b"):
         variant = variant[1:]
@@ -154,7 +153,7 @@ def model_info(name: str) -> ModelInfo:
 
 
 def _replace_child(parent: nn.Module, name: str, module: nn.Module) -> None:
-    if isinstance(parent, (nn.Sequential, nn.ModuleList)):
+    if isinstance(parent, nn.Sequential | nn.ModuleList):
         parent[int(name)] = module
     else:
         setattr(parent, name, module)
@@ -222,9 +221,7 @@ def create_model(
     options = {**implied, **model_kwargs}
     builder = spec.builder or _standard_builder
     model = builder(spec, num_classes, options)
-    requested_channels = (
-        spec.info.default_input_channels if in_channels is None else in_channels
-    )
+    requested_channels = spec.info.default_input_channels if in_channels is None else in_channels
     adapt_input_channels(model, requested_channels)
     model.architecture_name = canonical
     model.task = spec.info.task

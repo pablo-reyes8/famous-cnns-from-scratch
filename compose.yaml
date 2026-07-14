@@ -1,0 +1,30 @@
+services:
+  famous-cnns:
+    build:
+      context: .
+    image: famous-cnns:local
+    volumes:
+      - ./data:/workspace/data
+      - ./outputs:/workspace/outputs
+    command: ["list"]
+
+  smoke-test:
+    build:
+      context: .
+    image: famous-cnns:local
+    command:
+      - train
+      - --model
+      - lenet5
+      - --num-classes
+      - "2"
+      - --batch-size
+      - "2"
+      - --epochs
+      - "1"
+      - --smoke-test
+      - --output
+      - /workspace/outputs/lenet-smoke.pt
+    volumes:
+      - ./outputs:/workspace/outputs
+    profiles: [test]
