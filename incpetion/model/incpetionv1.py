@@ -1,7 +1,7 @@
 import torch.nn.functional as F
 import torch
 import torch.nn as nn
-from model.inception_aux_functions import *
+from .inception_aux_functions import *
 
 
 class GoogLeNetV1(nn.Module):

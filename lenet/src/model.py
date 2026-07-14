@@ -1,8 +1,5 @@
 import torch
 import torch.nn as nn
-import matplotlib.pyplot as plt
-import torch.nn.functional as F
-from tqdm.auto import tqdm
 
 
 class ConvTanh(nn.Module):

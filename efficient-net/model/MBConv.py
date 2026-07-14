@@ -1,10 +1,10 @@
 import torch.nn as nn
 import torch
 import math
-from model.cnn_utils import *
+from .cnn_utils import *
 import torch.nn.functional as F
 
-from model.efficent_blocks import *
+from .efficent_blocks import *
 
 class MBConv(nn.Module):
     """

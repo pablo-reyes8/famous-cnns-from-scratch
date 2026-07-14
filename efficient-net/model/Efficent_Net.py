@@ -1,6 +1,6 @@
 import torch 
-from model.MBConv import *
-from model.compuder_scaler import *
+from .MBConv import *
+from .compuder_scaler import *
 
 class EfficientNet(nn.Module):
     """

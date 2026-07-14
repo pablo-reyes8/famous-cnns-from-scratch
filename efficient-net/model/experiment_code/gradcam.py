@@ -169,25 +169,26 @@ def show_cam_colorized(x_chw, cam, alpha=0.45, cmap_name="jet"):
 
 # 5 capas a diferentes profundidades (ajústalas si quieres otras)
 # targets = [
-    "blocks.3.depthwise.conv",
-    "blocks.7.depthwise.conv",
-    "blocks.11.project.conv",
-    "blocks.15.depthwise.conv",
-    "head.conv"]
+#     "blocks.3.depthwise.conv",
+#     "blocks.7.depthwise.conv",
+#     "blocks.11.project.conv",
+#     "blocks.15.depthwise.conv",
+#     "head.conv",
+# ]
 
 
 # for i in range(n_show):
-    x1 = xb[i:i+1]
-    x1_chw = xb[i].detach().cpu()
-
-    fig, axes = plt.subplots(1, len(targets), figsize=(len(targets)*3.2, 3.2))
-    for j, tgt in enumerate(targets):
-        gc = GradCAM(model_b0, tgt)
-        cam, cls = gc(x1, class_idx=None)
-        vis = show_cam_colorized(x1_chw, cam.cpu(), alpha=0.45, cmap_name="jet")
-        axes[j].imshow(vis)
-        axes[j].set_title(tgt, fontsize=9)
-        axes[j].axis("off")
-        gc.remove_hooks()
-    plt.tight_layout()
-    plt.show()
+#     x1 = xb[i:i+1]
+#     x1_chw = xb[i].detach().cpu()
+#
+#     fig, axes = plt.subplots(1, len(targets), figsize=(len(targets)*3.2, 3.2))
+#     for j, tgt in enumerate(targets):
+#         gc = GradCAM(model_b0, tgt)
+#         cam, cls = gc(x1, class_idx=None)
+#         vis = show_cam_colorized(x1_chw, cam.cpu(), alpha=0.45, cmap_name="jet")
+#         axes[j].imshow(vis)
+#         axes[j].set_title(tgt, fontsize=9)
+#         axes[j].axis("off")
+#         gc.remove_hooks()
+#     plt.tight_layout()
+#     plt.show()

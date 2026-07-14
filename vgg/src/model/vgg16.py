@@ -1,7 +1,7 @@
 
 import torch
 import torch.nn as nn
-from src.model.vgg_blocks import * 
+from .vgg_blocks import *
 
 class VGG16(nn.Module):
     def __init__(self, num_classes = 2, use_bn = False):

@@ -15,14 +15,115 @@ The repository is designed as a **code-first literature review** of CNN architec
 
 ## 📑 Table of Contents
 
-1. [Architectures at a Glance](#-architectures-at-a-glance)
-2. [Research Focus](#research-focus)
-3. [Features & Tooling](#features-tooling)
-4. [Repository Tour](#-repository-tour)
-5. [Visualization Suite](#-visualization-suite)
-6. [Historical Timeline](#-historical-timeline)
-7. [References](#-references)
-8. [License](#-license)
+1. [Unified Library API](#-unified-library-api)
+2. [Architectures at a Glance](#-architectures-at-a-glance)
+3. [Research Focus](#research-focus)
+4. [Features & Tooling](#features-tooling)
+5. [Repository Tour](#-repository-tour)
+6. [Visualization Suite](#-visualization-suite)
+7. [Historical Timeline](#-historical-timeline)
+8. [References](#-references)
+9. [License](#-license)
+
+---
+
+## 🚀 Unified Library API
+
+The original architecture folders remain independent and readable, while the root-level `famous_cnns` package provides one stable interface over all of them. Install the project in editable mode during development:
+
+```bash
+pip install -e .
+```
+
+### Build models like `torchvision.models`
+
+```python
+from famous_cnns import create_model, list_models
+
+print(list_models())
+
+# The first convolution is automatically changed from RGB to five channels.
+model = create_model(
+    "resnet50",
+    num_classes=12,
+    in_channels=5,
+)
+
+# Architecture-specific options are still available.
+mobile = create_model(
+    "mobilenet_v2",
+    num_classes=12,
+    in_channels=3,
+    width_mult=0.75,
+)
+
+efficient = create_model("efficientnet_b3", num_classes=12)
+segmenter = create_model("unet", num_classes=4, in_channels=1, base=32)
+```
+
+Canonical names are `lenet5`, `alexnet`, `vgg16`, `inception_v1`, `resnet50`, `resnet101`, `unet`, `mobilenet_v1`, `mobilenet_v2`, and `efficientnet`. Useful aliases such as `lenet`, `googlenet`, `u-net`, and `efficientnet_b0` through `efficientnet_b7` are accepted.
+
+### One orchestrator for training and inference
+
+```python
+from famous_cnns import CNNOrchestrator
+
+cnn = CNNOrchestrator(
+    "resnet50",
+    num_classes=10,
+    in_channels=3,
+    optimizer="adamw",       # adam, adamw, sgd, or rmsprop
+    lr=3e-4,
+    optimizer_kwargs={"weight_decay": 1e-4},
+    device="cuda",           # omit for automatic CUDA/CPU selection
+    auto_resize=True,         # optional resize to the recommended input size
+)
+
+history = cnn.fit(
+    train_loader,
+    epochs=20,
+    val_loader=validation_loader,
+    scheduler=scheduler,      # optional PyTorch scheduler
+)
+
+metrics = cnn.evaluate(test_loader)
+probabilities = cnn.predict(images)
+print(cnn.summary())
+cnn.save("checkpoints/resnet50.pt")
+```
+
+The orchestrator automatically uses cross-entropy for classification, binary cross-entropy for one-class U-Net segmentation, auxiliary Inception losses during training, and pixel accuracy for segmentation. A custom PyTorch loss can be supplied with `criterion=...`.
+
+### Optimizers and visualizations
+
+An optimizer can also be created without the orchestrator:
+
+```python
+from famous_cnns import create_optimizer
+
+optimizer = create_optimizer(
+    model.parameters(),
+    "sgd",
+    lr=0.01,
+    momentum=0.9,
+)
+```
+
+Training curves, prediction grids, and internal feature maps share the same model-agnostic API and return standard Matplotlib figures:
+
+```python
+fig_history = cnn.plot_history()
+fig_predictions = cnn.plot_predictions(
+    images,
+    targets,
+    class_names=class_names,
+)
+fig_features = cnn.plot_feature_maps(images[:1], layer="layer3")
+
+fig_history.savefig("training_history.png", dpi=150, bbox_inches="tight")
+```
+
+Input channels are adapted automatically, but spatial size still follows each architecture. `auto_resize=True` handles the recommended square size in the orchestrator; it is especially useful for LeNet-5 (32×32) and VGG-16 (224×224).
 
 ---
 

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from model.mobiel_net_block import *
+from .mobiel_net_block import *
 
 def count_params(model):
     return sum(p.numel() for p in model.parameters())

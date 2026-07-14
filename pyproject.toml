@@ -1,7 +1,7 @@
 [project]
 name = "famous_deep_learning_cnns"
-version = "0.1.0"
-description = ""
+version = "0.2.0"
+description = "From-scratch famous CNNs with a unified high-level PyTorch API"
 authors = [
     {name = "Pablo",email = "alejogranados229@gmail.com"}
 ]
@@ -14,8 +14,22 @@ dependencies = [
     "scikit-learn (>=1.7.1,<2.0.0)",
     "matplotlib (>=3.10.5,<4.0.0)",
     "seaborn (>=0.13.2,<0.14.0)",
-    "tqdtions (m (>=4.67.1,<5.0.0)",
-    "albumenta>=2.0.8,<3.0.0)"
+    "tqdm (>=4.67.1,<5.0.0)",
+    "albumentations (>=2.0.8,<3.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "famous_cnns"}]
+include = [
+    {path = "lenet/src", format = ["sdist", "wheel"]},
+    {path = "alexnet/src", format = ["sdist", "wheel"]},
+    {path = "vgg/src/model", format = ["sdist", "wheel"]},
+    {path = "incpetion/model", format = ["sdist", "wheel"]},
+    {path = "resnet/ResNet50/src", format = ["sdist", "wheel"]},
+    {path = "resnet/ResNet101/src/model", format = ["sdist", "wheel"]},
+    {path = "u-net/src", format = ["sdist", "wheel"]},
+    {path = "mobilenet/model", format = ["sdist", "wheel"]},
+    {path = "efficient-net/model", format = ["sdist", "wheel"]},
 ]
 
 

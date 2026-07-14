@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 
-from model.depth_wise_block import * 
-from model.point_wise_block import *
+from .depth_wise_block import *
+from .point_wise_block import *
 
 class MobileNetBlock(nn.Module):
     def __init__(

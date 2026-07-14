@@ -1,7 +1,7 @@
 
 import torch 
 import torch.nn as nn 
-from src.model.resnet_bloks import *
+from .resnet_bloks import *
 
 class ResNet(nn.Module):
     """
