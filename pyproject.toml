@@ -13,10 +13,10 @@ dependencies = [
     "torch (>=2.8.0,<3.0.0)",
     "torchvision (>=0.23.0,<0.24.0)",
     "pandas (>=2.3.3,<3.0.0)",
-    "scikit-learn (>=1.7.1,<2.0.0)",
-    "matplotlib (>=3.10.5,<4.0.0)",
+    "scikit-learn (>=1.7.2,<2.0.0)",
+    "matplotlib (>=3.10.9,<4.0.0)",
     "seaborn (>=0.13.2,<0.14.0)",
-    "tqdm (>=4.67.1,<5.0.0)",
+    "tqdm (>=4.69.1,<5.0.0)",
     "albumentations (>=2.0.8,<3.0.0)"
 ]
 
@@ -24,10 +24,10 @@ dependencies = [
 dev = [
     "build>=1.5,<2.0",
     "mypy>=2.3,<3.0",
-    "pre-commit>=4.6,<5.0",
+    "pre-commit>=4.6.1,<5.0",
     "pytest>=9.1,<10.0",
     "pytest-cov>=7.1,<8.0",
-    "ruff>=0.15,<1.0",
+    "ruff>=0.16.0,<1.0",
 ]
 
 [project.scripts]
