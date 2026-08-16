@@ -11,7 +11,7 @@
 ![Stars](https://img.shields.io/github/stars/pablo-reyes8/famous-cnns-from-scratch?style=social)
 [![CI](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/ci.yml/badge.svg)](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/codeql.yml/badge.svg)](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/codeql.yml)
-[![Docker](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/docker.yml/badge.svg)](https://github.com/pablo-reyes8/famous-cnns-from-scratch/actions/workflows/docker.yml)
+
 
 
 A collection of **from-scratch PyTorch implementations** of influential CNN architectures. Each model is implemented without `torchvision.models` abstractions to keep the code **transparent**, **auditable**, and easy to modify for research and education.
